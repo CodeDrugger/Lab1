@@ -6,44 +6,40 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class project0
-{
-	static String equation;
-	static String control;
+public class Project0 {
+	private static String equation;
+	private static String control;
+	
+	private static final int STATE = 10;
 
-	public static void main(String[] args)
-	{
-		while (true)
+	public static void main(final String[] args) {
+		while (true) {
 			expression();
+		}
 	}
 
-	static void expression()
-	{
-
+	static void expression() {
 		System.out.println(">");
-		Scanner in = new Scanner(System.in);
-		String temp = in.nextLine();
-		if (temp.charAt(0) == '!')
-		{
+		Scanner inPut = new Scanner(System.in);
+		String temp = inPut.nextLine();
+		if (temp.charAt(0) == '!') {
 			control = temp;
-			if (control.charAt(1) == 'd')
+			if (control.charAt(1) == 'd') {
 				derivative();
-			else if (control.charAt(1) == 's')
+			} else if (control.charAt(1) == 's') {
 				simplify();
-		}
-		else
-		{
+			}
+		} else {
 			temp = temp.replace(" ", "");
 			temp = temp.replace("	", "");
 			equation = temp;
 			char c;
-			for (int i = 0; i < equation.length(); i++)
-			{
+			for (int i = 0; i < equation.length(); i++) {
 				c = equation.charAt(i);
-				if (!((c >= 48 && c <= 57) || (c >= 97 && c <= 122) || c == '+' || c == '*' || c == '-'))
-				{
+				if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
+						|| c == '+' || c == '*' || c == '-')) {
 					equation = null;
-					System.out.println("Please check the input!");
+					System.out.println("Please check the inPut!");
 					return;
 				}
 			}
@@ -51,15 +47,14 @@ public class project0
 		}
 	}
 
-	static void simplify()
-	{
+	static void simplify() {
 		// a+b+c
 		// !simplify a=2
 		String eq = equation;
 		String front = "";
 		String number = "";
 		String order = "";
-		int f = 0;
+		//int f = 0;
 		int e = 0;
 		int j = 0;
 
@@ -67,7 +62,7 @@ public class project0
 		int nummu = 1;
 		int numsum = 0;
 
-		// ÅÐ¶¨Ç°Ò»¸öÊÇÊý×Ö»¹ÊÇ×ÖÄ¸
+		// åˆ¤å®šå‰ä¸€ä¸ªæ˜¯æ•°å­—è¿˜æ˜¯å­—æ¯
 		boolean n = false;
 		boolean a = false;
 
@@ -76,32 +71,26 @@ public class project0
 		String stringsum = "";
 		// replace
 
-		front = control.substring(10, control.indexOf("="));
+		front = control.substring(STATE, control.indexOf("="));
 		number = control.substring(control.indexOf("=") + 1);
 
 		String abc = "";
 		int h = 0;
 		boolean flag = false;
-		while (h < eq.length())
-		{
-			if (eq.charAt(h) >= 'a' && eq.charAt(h) <= 'z')
-
-			{
+		while (h < eq.length()) {
+			if (eq.charAt(h) >= 'a' && eq.charAt(h) <= 'z') {
 				abc = abc + eq.charAt(h);
-				if (h == eq.length() - 1 && abc.equals(front))
-				{
+				if (h == eq.length() - 1 && abc.equals(front)) {
 					flag = true;
 					eq = eq.substring(0, h - abc.length() + 1) + number;
 					break;
 				}
-			}
-			else
-			{
+			} else {
 				a = false;
-				if (abc.equals(front))
-				{
+				if (abc.equals(front)) {
 					flag = true;
-					eq = eq.substring(0, h - abc.length()) + number + eq.substring(h);
+					eq = eq.substring(0, h - abc.length()) 
+							+ number + eq.substring(h);
 					h = h - abc.length() + number.length();
 				}
 				abc = "";
@@ -110,113 +99,108 @@ public class project0
 		}
 		a = false;
 		eq = eq + "+";
-		if (eq != null)
-		{
-			if (eq.charAt(0) == '-')
+		if (eq != null) {
+			if (eq.charAt(0) == '-') {
 				order = order + "-";
-			else
+			} else {
 				order = order + "+";
-			for (int i = 1; i < eq.length(); i++)
-				if (eq.charAt(i) == '+')
+			}
+			for (int i = 1; i < eq.length(); i++) {
+				if (eq.charAt(i) == '+') {
 					order = order + "+";
-				else if (eq.charAt(i) == '-')
+				} else if (eq.charAt(i) == '-') {
 					order = order + "-";
+				}
+			}
 			j = 1;
-			f = 0;
-			while (true)
-			{
+			//f = 0;
+			while (true) {
 				e = eq.indexOf(String.valueOf(order.charAt(j)));
 				j++;
 				front = eq.substring(0, e);
 				front = front + "*";
-				if (j < order.length())
+				if (j < order.length()) {
 					eq = eq.substring(e + 1);
+				}
 				nummu = 1;
 				num = 1;
 				ab = "";
 				absum = "";
-				for (int i = 0; i < front.length(); i++)
-				{
-					if (front.charAt(i) >= '0' && front.charAt(i) <= '9')
-					{
-						if (n == true)
-							num = num * 10 + (front.charAt(i) - '0');
-						else
-						{
+				for (int i = 0; i < front.length(); i++) {
+					if (front.charAt(i) >= '0' && front.charAt(i) <= '9') {
+						if (n) {
+							num = num * STATE + (front.charAt(i) - '0');
+						} else {
 							n = true;
 							num = front.charAt(i) - '0';
 						}
-					}
-					else if (front.charAt(i) >= 'a' && front.charAt(i) <= 'z')
-					{
-						if (a == true)
+					} else if (front.charAt(i) >= 'a' 
+							&& front.charAt(i) <= 'z') {
+						if (a) {
 							ab = ab + front.charAt(i);
-						else
-						{
+						} else {
 							a = true;
 							ab = "" + front.charAt(i);
 						}
-					}
-					else
-					{
-						if (n == true)
+					} else {
+						if (n) {
 							nummu = nummu * num;
-						if (a == true)
+						}
+						if (a) {
 							absum = absum + '*' + ab;
+						}
 						n = false;
 						a = false;
 					}
 				}
-				// ´¿×ÖÄ¸
-				if (nummu == 1 && absum != "")
+				// çº¯å­—æ¯
+				if (nummu == 1 && !"".equals(absum)) {
 					front = absum.substring(1);
-				else
+				} else {
 					front = nummu + absum;
-				// ´¿Êý×Ö
-				if (absum == "")
-				{
-					front = "";
-					if (order.charAt(j - 2) == '+')
-						numsum = numsum + nummu;
-					else if (order.charAt(j - 2) == '-')
-						numsum = numsum - nummu;
 				}
-				else
+				// çº¯æ•°å­—
+				if ("".equals(absum)) {
+					front = "";
+					if (order.charAt(j - 2) == '+') {
+						numsum = numsum + nummu;
+					} else if (order.charAt(j - 2) == '-') {
+						numsum = numsum - nummu;
+					}
+				} else {
 					stringsum = stringsum + order.charAt(j - 2) + front;
-				if (j == order.length())
+				}
+				if (j == order.length()) {
 					break;
+				}
 			}
 			stringsum = numsum + stringsum;
-			if (stringsum.charAt(0) == '+')
+			if (stringsum.charAt(0) == '+') {
 				stringsum = stringsum.substring(1);
-			if (stringsum.charAt(0) == '0')
+			}
+			if (stringsum.charAt(0) == '0') {
 				stringsum = stringsum.substring(2);
-
+			}
 			stringsum = reorganize(stringsum);
-			if (flag == true)
+			if (flag) {
 				System.out.println(stringsum);
-			else
+			} else {
 				System.out.println("Error,no variable!");
+			}
 		}
 	}
 
-	static String unitsort(String substr)// unitÅÅÐò
-	{
+	static String unitsort(final String substr) {   // unitæŽ’åº
 		String sorted = "";
 		List<String> list = new ArrayList<String>();
 		String unit = "";
 		int prepos = 0;
-		for (int i = 0; i < substr.length(); i++)
-		{
-			if (substr.charAt(i) == '*' || i + 1 == substr.length())
-			{
-				if (i + 1 == substr.length())// µÃµ½×îºóÒ»¸öunit
-				{
+		for (int i = 0; i < substr.length(); i++) {
+			if (substr.charAt(i) == '*' || i + 1 == substr.length()) {
+				if (i + 1 == substr.length()) {  // å¾—åˆ°æœ€åŽä¸€ä¸ªunit
 					unit = substr.substring(prepos, i + 1);
 					prepos = 0;
-				}
-				else
-				{
+				} else {
 					unit = substr.substring(prepos, i);
 					prepos = i + 1;
 				}
@@ -224,18 +208,17 @@ public class project0
 			}
 		}
 		list.sort(null);
-		for (int i = 0; i < list.size(); i++)
-		{
+		for (int i = 0; i < list.size(); i++) {
 			sorted += list.get(i);
 			sorted += "*";
 		}
-		if (sorted != "")
+		if (!"".equals(sorted)) {
 			sorted = sorted.substring(0, sorted.length() - 1);
+		}
 		return sorted;
 	}
 
-	static String reorganize(String result)// ÕûÀí
-	{
+	static String reorganize(final String result) { // æ•´ç†
 		int prepos = 0;
 		int j = 0;
 		int num;
@@ -245,99 +228,86 @@ public class project0
 		String temp;
 		String nstr = "";
 		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (int i = 0; i < result.length(); i++)
-		{
-			if ((result.charAt(i) == '+' || result.charAt(i) == '-' || i + 1 == result.length()))
-			{
-				if (i + 1 == result.length())
-				{
+		for (int i = 0; i < result.length(); i++) {
+			if ((result.charAt(i) == '+' || result.charAt(i) == '-' 
+					|| i + 1 == result.length())) {
+				if (i + 1 == result.length()) {
 					temp = result.substring(prepos, i + 1);
 					prepos = 0;
-				}
-				else
-				{
+				} else {
 					temp = result.substring(prepos, i);
 					prepos = i + 1;
 				}
-				for (j = 0; j <= temp.length() - 1 && temp.charAt(j) != '*'; j++)
-				{
-					if ((temp.charAt(j) >= 48 && temp.charAt(j) <= 57))
+				for (j = 0; j <= temp.length() - 1 
+						&& temp.charAt(j) != '*'; j++) {
+					if ((temp.charAt(j) >= '0' && temp.charAt(j) <= '9')) {
 						isnum = true;
+					}
 				}
-				if (isnum)
-				{
+				if (isnum) {
 					num = Integer.parseInt(temp.substring(0, j));
-					if (j + 1 < temp.length())
+					if (j + 1 < temp.length()) {
 						temp = temp.substring(j + 1);
-					else
+					} else {
 						temp = "";
-				}
-				else
+					}
+				} else {
 					num = 1;
-				if (negative)
-				{
+				}
+				if (negative) {
 					num *= -1;
 					negative = false;
 				}
 				temp = unitsort(temp);
-				if (!map.containsKey(temp))
-					map.put(temp, num);
-				else
-				{
+				if (map.containsKey(temp)) {
 					num += map.get(temp);
+					map.put(temp, num);
+				} else {
 					map.put(temp, num);
 				}
 				j = 0;
 				isnum = false;
-				if (result.charAt(i) == '-')
+				if (result.charAt(i) == '-') {
 					negative = true;
+				}
 			}
 		}
 		Iterator<Entry<String, Integer>> iter = map.entrySet().iterator();
-		while (iter.hasNext())
-		{
-			Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iter.next();
+		while (iter.hasNext()) {
+			Map.Entry<String, Integer> entry = 
+					(Map.Entry<String, Integer>) iter.next();
 			String str = entry.getKey().toString();
 			Integer n = (Integer) entry.getValue();
-			if (n > 0 && n != 1)
-			{
+			if (n > 0 && n != 1) {
 				nstr = "+" + n.toString();
 				neweq += nstr;
-				if (str != "")
-				{
+				if (!"".equals(str)) {
 					neweq += "*";
 					neweq += str;
 				}
-			}
-			else if (n < 0)
-			{
+			} else if (n < 0) {
 				nstr = n.toString();
 				neweq += nstr;
-				if (str != "")
-				{
+				if (!"".equals(str)) {
 					neweq += "*";
 					neweq += str;
 				}
-			}
-			else if (n == 1)
-			{
-				if (str == "")
-				{
+			} else if (n == 1) {
+				if ("".equals(str)) {
 					nstr = "+" + n.toString();
 					neweq += nstr;
-				}
-				else
-				{
+				} else {
 					str = "+" + str;
 					neweq += str;
 				}
 			}
 		}
-		if (neweq.length() == 0)
+		if (neweq.length() == 0) {
 			neweq = "0";
-		if (neweq.length() != 0 && neweq.charAt(0) == '+')
+		}
+		if (neweq.length() != 0 && neweq.charAt(0) == '+') {
 			neweq = neweq.substring(1);
-
+		}
 		/*
 		 * if (n > 0) nstr = "+" + n.toString(); if (n != 1) { if (n != 0) neweq
 		 * += nstr; neweq += "*"; } if (n == 0) str = ""; if (str == "") neweq =
@@ -349,107 +319,87 @@ public class project0
 		return neweq;
 	}
 
-	static void derivative()
-	{
-		int times = 0;// ´ÎÊý
-		String var = null;// ÒªÇóµ¼µÄ±äÁ¿
-		for (int i = 0; i < control.length(); i++)
-		{
-			if (control.charAt(i) == 'd')
+	static void derivative() {
+		int times = 0; // æ¬¡æ•°
+		String var = null; // è¦æ±‚å¯¼çš„å˜é‡
+		for (int i = 0; i < control.length(); i++) {
+			if (control.charAt(i) == 'd') {
 				times++;
-			if (times == 2)
-			{
+			}
+			if (times == 2) {
 				times = 0;
 				var = control.substring(i + 1, control.length());
 				break;
 			}
 		}
-		String substr = null, unit = null;// ½«Õû¸öÊ½×Ó°´+·Ö¸îºóµÄ´®£»½«substr°´*·Ö¸îºóµÄ´®
-		int prepos_main = 0, prepos_sub = 0;// ·Ö¸îÕû¸öÊ½×ÓÊ±Ç°Ò»·Ö¸îÎ»ÖÃµÄ±ê¼Ç£»·Ö¸îsubstrÊ±Ç°Ò»·Ö¸îÎ»ÖÃµÄ±ê¼Ç
-		int coe = 1, temp;// substrµÄÏµÊý£»ÁÙÊ±±äÁ¿
-		int positive = 1;// ¡®+¡¯¡¢¡®-¡¯ºÅ±ê¼Ç£¬1£º+ 0£º- 2£º¿Õ
-		String result = "", tem = "";// ×îÖÕÇóµ¼µÄ½á¹û£»ÁÙÊ±±äÁ¿
-		boolean e_hasvar = false, u_hasvar = false;// Õû¸öÊ½×ÓÖÐÊÇ·ñ°üº¬var£»unitÊÇ·ñÊÇvar
-		for (int i = 0; i < equation.length(); i++)
-		{
-			// °´¼Ó¼õºÅ·Ö¸î×Ö·û´®
-			if ((equation.charAt(i) == '+' || equation.charAt(i) == '-' || i + 1 == equation.length()) && (i != 0))
-			{
-				if (i + 1 == equation.length())// µÃµ½×îºóÒ»¸ösubstr
-				{
-					substr = equation.substring(prepos_main, i + 1);
-					prepos_main = 0;
+		String substr = null, unit = null; // å°†æ•´ä¸ªå¼å­æŒ‰+åˆ†å‰²åŽçš„ä¸²ï¼›å°†substræŒ‰*åˆ†å‰²åŽçš„ä¸²
+		int preposMain = 0;
+		int preposSub = 0; // åˆ†å‰²æ•´ä¸ªå¼å­æ—¶å‰ä¸€åˆ†å‰²ä½ç½®çš„æ ‡è®°ï¼›åˆ†å‰²substræ—¶å‰ä¸€åˆ†å‰²ä½ç½®çš„æ ‡è®°
+		int coe = 1, temp; // substrçš„ç³»æ•°ï¼›ä¸´æ—¶å˜é‡
+		int positive = 1; // â€˜+â€™ã€â€˜-â€™å·æ ‡è®°ï¼Œ1ï¼š+ 0ï¼š- 2ï¼šç©º
+		String result = "", tem = ""; // æœ€ç»ˆæ±‚å¯¼çš„ç»“æžœï¼›ä¸´æ—¶å˜é‡
+		boolean eHasVar = false, uHasVar = false; // æ•´ä¸ªå¼å­ä¸­æ˜¯å¦åŒ…å«varï¼›unitæ˜¯å¦æ˜¯var
+		for (int i = 0; i < equation.length(); i++) {
+			// æŒ‰åŠ å‡å·åˆ†å‰²å­—ç¬¦ä¸²
+			if ((equation.charAt(i) == '+' || equation.charAt(i) == '-' 
+					|| i + 1 == equation.length()) && (i != 0)) {
+				if (i + 1 == equation.length()) { // å¾—åˆ°æœ€åŽä¸€ä¸ªsubstr
+					substr = equation.substring(preposMain, i + 1);
+					preposMain = 0;
+				} else {
+					substr = equation.substring(preposMain, i);
+					preposMain = i + 1;
 				}
-				else
-				{
-					substr = equation.substring(prepos_main, i);
-					prepos_main = i + 1;
-				}
-				if (equation.charAt(i) == '+')
+				if (equation.charAt(i) == '+') {
 					positive = 1;
-				else if (equation.charAt(i) == '-')
+				} else if (equation.charAt(i) == '-') {
 					positive = 0;
-				else
+				} else {
 					positive = 2;
-				for (int j = 0; j < substr.length(); j++)
-				{ // °´³ËºÅ·Ö¸î×Ó×Ö·û´®
-					if (substr.charAt(j) == '*' || j + 1 == substr.length())
-					{
-						if (j + 1 == substr.length())// µÃµ½×îºóÒ»¸öunit
-						{
-							unit = substr.substring(prepos_sub, j + 1);
-							prepos_sub = 0;
+				}
+				for (int j = 0; j < substr.length(); j++) { // æŒ‰ä¹˜å·åˆ†å‰²å­å­—ç¬¦ä¸²
+					if (substr.charAt(j) == '*' || j + 1 == substr.length()) {
+						if (j + 1 == substr.length()) { // å¾—åˆ°æœ€åŽä¸€ä¸ªunit
+							unit = substr.substring(preposSub, j + 1);
+							preposSub = 0;
+						} else {
+							unit = substr.substring(preposSub, j);
+							preposSub = j + 1;
 						}
-						else
-						{
-							unit = substr.substring(prepos_sub, j);
-							prepos_sub = j + 1;
-						}
-						if (unit.charAt(0) >= 48 && unit.charAt(0) <= 57)// Êý×Ö
-						{
+						if (unit.charAt(0) >= '0' 
+								&& unit.charAt(0) <= '9') { // æ•°å­—
 							temp = Integer.parseInt(unit);
 							coe *= temp;
-						}
-						else if (unit.equals(var))// var
-						{
+						} else if (unit.equals(var)) { // var
 							times++;
-							e_hasvar = true;
-							u_hasvar = true;
-						}
-						else// ÆäËû
-						{
+							eHasVar = true;
+							uHasVar = true;
+						} else { // å…¶ä»–
 							tem += unit;
 							tem += "*";
 						}
 					}
 				}
-				if (times > 0)// substrµÄ´ÎÊý´óÓÚ0
-				{
+				if (times > 0) { // substrçš„æ¬¡æ•°å¤§äºŽ0
 					coe *= times;
-					if (coe != 1)
-					{
+					if (coe == 1) {
+						if ("".equals(tem)) {
+							result += "1";
+						} else {
+							
+							tem = tem.substring(0, tem.length() - 1);
+							result += tem;
+						}
+					} else {
 						result += String.valueOf(coe);
-						if (tem != "")
-						{
+						if (!"".equals(tem)) {
 							result += "*";
 							tem = tem.substring(0, tem.length() - 1);
 							result += tem;
 						}
 					}
-					else
-					{
-						if (tem != "")
-						{
-							tem = tem.substring(0, tem.length() - 1);
-							result += tem;
-						}
-						else
-							result += "1";
-					}
-					if (times != 1)
-					{
-						for (int k = times; k > 1; k--)
-						{
+					if (times != 1) {
+						for (int k = times; k > 1; k--) {
 							result += "*";
 							result += var;
 						}
@@ -459,22 +409,27 @@ public class project0
 				coe = 1;
 				tem = "";
 
-				if (positive == 1 && u_hasvar)
+				if (positive == 1 && uHasVar) {
 					result += "+";
-				else if (positive == 0 && result != "" && result.charAt(result.length() - 1) != '-'
-						&& result.charAt(result.length() - 1) != '+')
+				} else if (positive == 0 && !"".equals(result) 
+						&& result.charAt(result.length() - 1) != '-'
+						&& result.charAt(result.length() - 1) != '+') {
 					result += "-";
-				u_hasvar = false;
+				}
+				uHasVar = false;
 			}
 		}
-		if (result.length() != 0
-				&& (result.charAt(result.length() - 1) == '+' || result.charAt(result.length() - 1) == '-'))
+		if (result.length() != 0 && (result.charAt(result.length() - 1) == '+' 
+				|| result.charAt(result.length() - 1) == '-')) {
 			result = result.substring(0, result.length() - 1);
+		}
 		result = reorganize(result);
-		if (e_hasvar)
+		if (eHasVar) {
 			System.out.println(result);
-		else
+		} else {
 			System.out.println("Error,no variable!");
+		}
 	}
 }
 //add a change :)
+//perfect! :)
