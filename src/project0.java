@@ -39,7 +39,7 @@ public class Project0 {
 				if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
 						|| c == '+' || c == '*' || c == '-')) {
 					equation = null;
-					System.out.println("Please check the inPut!");
+					System.out.println("Please check the input!");
 					return;
 				}
 			}
@@ -308,13 +308,6 @@ public class Project0 {
 		if (neweq.length() != 0 && neweq.charAt(0) == '+') {
 			neweq = neweq.substring(1);
 		}
-		/*
-		 * if (n > 0) nstr = "+" + n.toString(); if (n != 1) { if (n != 0) neweq
-		 * += nstr; neweq += "*"; } if (n == 0) str = ""; if (str == "") neweq =
-		 * neweq.substring(0, neweq.length() - 1); neweq += str; } if (neweq ==
-		 * "") neweq = "0"; if (neweq != "" && neweq.charAt(0) == '+') neweq =
-		 * neweq.substring(1);
-		 */
 
 		return neweq;
 	}
