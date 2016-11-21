@@ -1,3 +1,4 @@
+package main;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -6,10 +7,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class Project0 {
+public class project0 {
 	private static String equation;
 	private static String control;
-	
+
 	private static final int STATE = 10;
 
 	public static void main(final String[] args) {
@@ -25,7 +26,8 @@ public class Project0 {
 		if (temp.charAt(0) == '!') {
 			control = temp;
 			if (control.charAt(1) == 'd') {
-				derivative();
+
+				;
 			} else if (control.charAt(1) == 's') {
 				simplify();
 			}
@@ -36,7 +38,7 @@ public class Project0 {
 			char c;
 			for (int i = 0; i < equation.length(); i++) {
 				c = equation.charAt(i);
-				if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
+				if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z')
 						|| c == '+' || c == '*' || c == '-')) {
 					equation = null;
 					System.out.println("Please check the input!");
@@ -54,7 +56,7 @@ public class Project0 {
 		String front = "";
 		String number = "";
 		String order = "";
-		//int f = 0;
+		// int f = 0;
 		int e = 0;
 		int j = 0;
 
@@ -62,7 +64,7 @@ public class Project0 {
 		int nummu = 1;
 		int numsum = 0;
 
-		// 判定前一个是数字还是字母
+		// 鍒ゅ畾鍓嶄竴涓槸鏁板瓧杩樻槸瀛楁瘝
 		boolean n = false;
 		boolean a = false;
 
@@ -89,8 +91,8 @@ public class Project0 {
 				a = false;
 				if (abc.equals(front)) {
 					flag = true;
-					eq = eq.substring(0, h - abc.length()) 
-							+ number + eq.substring(h);
+					eq = eq.substring(0, h - abc.length()) + number
+							+ eq.substring(h);
 					h = h - abc.length() + number.length();
 				}
 				abc = "";
@@ -113,7 +115,7 @@ public class Project0 {
 				}
 			}
 			j = 1;
-			//f = 0;
+			// f = 0;
 			while (true) {
 				e = eq.indexOf(String.valueOf(order.charAt(j)));
 				j++;
@@ -134,7 +136,7 @@ public class Project0 {
 							n = true;
 							num = front.charAt(i) - '0';
 						}
-					} else if (front.charAt(i) >= 'a' 
+					} else if (front.charAt(i) >= 'a'
 							&& front.charAt(i) <= 'z') {
 						if (a) {
 							ab = ab + front.charAt(i);
@@ -153,13 +155,13 @@ public class Project0 {
 						a = false;
 					}
 				}
-				// 纯字母
+				// 绾瓧姣�
 				if (nummu == 1 && !"".equals(absum)) {
 					front = absum.substring(1);
 				} else {
 					front = nummu + absum;
 				}
-				// 纯数字
+				// 绾暟瀛�
 				if ("".equals(absum)) {
 					front = "";
 					if (order.charAt(j - 2) == '+') {
@@ -190,14 +192,14 @@ public class Project0 {
 		}
 	}
 
-	static String unitsort(final String substr) {   // unit排序
+	static String unitsort(final String substr) { // unit鎺掑簭
 		String sorted = "";
 		List<String> list = new ArrayList<String>();
 		String unit = "";
 		int prepos = 0;
 		for (int i = 0; i < substr.length(); i++) {
 			if (substr.charAt(i) == '*' || i + 1 == substr.length()) {
-				if (i + 1 == substr.length()) {  // 得到最后一个unit
+				if (i + 1 == substr.length()) { // 寰楀埌鏈�鍚庝竴涓猽nit
 					unit = substr.substring(prepos, i + 1);
 					prepos = 0;
 				} else {
@@ -218,7 +220,7 @@ public class Project0 {
 		return sorted;
 	}
 
-	static String reorganize(final String result) { // 整理
+	static String reorganize(final String result) { // 鏁寸悊
 		int prepos = 0;
 		int j = 0;
 		int num;
@@ -229,7 +231,7 @@ public class Project0 {
 		String nstr = "";
 		Map<String, Integer> map = new HashMap<String, Integer>();
 		for (int i = 0; i < result.length(); i++) {
-			if ((result.charAt(i) == '+' || result.charAt(i) == '-' 
+			if ((result.charAt(i) == '+' || result.charAt(i) == '-'
 					|| i + 1 == result.length())) {
 				if (i + 1 == result.length()) {
 					temp = result.substring(prepos, i + 1);
@@ -238,7 +240,7 @@ public class Project0 {
 					temp = result.substring(prepos, i);
 					prepos = i + 1;
 				}
-				for (j = 0; j <= temp.length() - 1 
+				for (j = 0; j <= temp.length() - 1
 						&& temp.charAt(j) != '*'; j++) {
 					if ((temp.charAt(j) >= '0' && temp.charAt(j) <= '9')) {
 						isnum = true;
@@ -274,8 +276,8 @@ public class Project0 {
 		}
 		Iterator<Entry<String, Integer>> iter = map.entrySet().iterator();
 		while (iter.hasNext()) {
-			Map.Entry<String, Integer> entry = 
-					(Map.Entry<String, Integer>) iter.next();
+			Map.Entry<String, Integer> entry = (Map.Entry<String, Integer>) iter
+					.next();
 			String str = entry.getKey().toString();
 			Integer n = (Integer) entry.getValue();
 			if (n > 0 && n != 1) {
@@ -312,7 +314,7 @@ public class Project0 {
 		return neweq;
 	}
 
-	static void derivative() {
+	static String derivative(String control, String equation) {
 		int times = 0; // 次数
 		String var = null; // 要求导的变量
 		for (int i = 0; i < control.length(); i++) {
@@ -329,12 +331,12 @@ public class Project0 {
 		int preposMain = 0;
 		int preposSub = 0; // 分割整个式子时前一分割位置的标记；分割substr时前一分割位置的标记
 		int coe = 1, temp; // substr的系数；临时变量
-		int positive = 1; // ‘+’、‘-’号标记，1：+ 0：- 2：空
+		int positive = 1; // // ‘+’、‘-’号标记，1：+ 0：- 2：空
 		String result = "", tem = ""; // 最终求导的结果；临时变量
 		boolean eHasVar = false, uHasVar = false; // 整个式子中是否包含var；unit是否是var
 		for (int i = 0; i < equation.length(); i++) {
 			// 按加减号分割字符串
-			if ((equation.charAt(i) == '+' || equation.charAt(i) == '-' 
+			if ((equation.charAt(i) == '+' || equation.charAt(i) == '-'
 					|| i + 1 == equation.length()) && (i != 0)) {
 				if (i + 1 == equation.length()) { // 得到最后一个substr
 					substr = equation.substring(preposMain, i + 1);
@@ -359,8 +361,7 @@ public class Project0 {
 							unit = substr.substring(preposSub, j);
 							preposSub = j + 1;
 						}
-						if (unit.charAt(0) >= '0' 
-								&& unit.charAt(0) <= '9') { // 数字
+						if (unit.charAt(0) >= '0' && unit.charAt(0) <= '9') { // 数字
 							temp = Integer.parseInt(unit);
 							coe *= temp;
 						} else if (unit.equals(var)) { // var
@@ -379,7 +380,7 @@ public class Project0 {
 						if ("".equals(tem)) {
 							result += "1";
 						} else {
-							
+
 							tem = tem.substring(0, tem.length() - 1);
 							result += tem;
 						}
@@ -401,10 +402,9 @@ public class Project0 {
 				times = 0;
 				coe = 1;
 				tem = "";
-
 				if (positive == 1 && uHasVar) {
 					result += "+";
-				} else if (positive == 0 && !"".equals(result) 
+				} else if (positive == 0 && !"".equals(result)
 						&& result.charAt(result.length() - 1) != '-'
 						&& result.charAt(result.length() - 1) != '+') {
 					result += "-";
@@ -412,17 +412,17 @@ public class Project0 {
 				uHasVar = false;
 			}
 		}
-		if (result.length() != 0 && (result.charAt(result.length() - 1) == '+' 
+		if (result.length() != 0 && (result.charAt(result.length() - 1) == '+'
 				|| result.charAt(result.length() - 1) == '-')) {
 			result = result.substring(0, result.length() - 1);
 		}
 		result = reorganize(result);
 		if (eHasVar) {
-			System.out.println(result);
+			return result;
 		} else {
-			System.out.println("Error,no variable!");
+			return "Error,no variable!";
 		}
 	}
 }
-//add a change :)
-//perfect! :)
+// add a change :)
+// perfect! :)
