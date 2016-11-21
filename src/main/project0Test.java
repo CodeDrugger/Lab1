@@ -27,7 +27,7 @@ public class project0Test {
 
 	@Test
 	public void testDerivative3() {
-		assertEquals("90", project0.derivative("!d/dx", "3*x*3+y*2"));
+		assertEquals("9", project0.derivative("!d/dx", "3*x*3+y*2"));
 	}
 	@Test
 	public void testDerivative4() {
