@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
-public class Project0 {
-	private static String equation;
-	private static String control;
-	
+public class project0 {
+	private static String equation;//多项式
+	private static String control;//控制命令
+	private static boolean flag=false;
 	private static final int STATE = 10;
 
 	public static void main(final String[] args) {
@@ -27,7 +27,7 @@ public class Project0 {
 			if (control.charAt(1) == 'd') {
 				derivative();
 			} else if (control.charAt(1) == 's') {
-				simplify();
+				simplify(equation,control);
 			}
 		} else {
 			temp = temp.replace(" ", "");
@@ -46,41 +46,16 @@ public class Project0 {
 			System.out.println(equation);
 		}
 	}
-
-	static void simplify() {
-		// a+b+c
-		// !simplify a=2
-		String eq = equation;
-		String front = "";
-		String number = "";
-		String order = "";
-		//int f = 0;
-		int e = 0;
-		int j = 0;
-
-		int num = 0;
-		int nummu = 1;
-		int numsum = 0;
-
-		// 判定前一个是数字还是字母
-		boolean n = false;
-		boolean a = false;
-
-		String ab = null;
-		String absum = null;
-		String stringsum = "";
-		// replace
-
-		front = control.substring(STATE, control.indexOf("="));
-		number = control.substring(control.indexOf("=") + 1);
-
+	static String replace(String front,String number,String eq)
+	{
+		boolean a=false;
 		String abc = "";
 		int h = 0;
-		boolean flag = false;
+		//对字符串进行替换
 		while (h < eq.length()) {
 			if (eq.charAt(h) >= 'a' && eq.charAt(h) <= 'z') {
 				abc = abc + eq.charAt(h);
-				if (h == eq.length() - 1 && abc.equals(front)) {
+				if (h == eq.length() - 1 && abc.equals(front)) {//以要替换的字符串结尾
 					flag = true;
 					eq = eq.substring(0, h - abc.length() + 1) + number;
 					break;
@@ -97,6 +72,68 @@ public class Project0 {
 			}
 			h++;
 		}
+		return eq;
+		
+	}
+	static String simplify(String equation,String control) {
+		// a+b+c
+		// !simplify a=2
+		
+		String eq = equation;
+		String front = "";
+		String number = "";
+		String order = "";
+		//int f = 0;
+		int e = 0;
+		int j = 0;
+
+		int num = 0;
+		int nummu = 1;
+		int numsum = 0;
+
+		// 判定前一个是数字还是字母
+		boolean n = false;
+		boolean a = false;
+		String ab = null;
+		String absum = null;
+		String stringsum = "";
+		// replace
+
+		for (int i = 0; i < equation.length(); i++) {
+			char c = equation.charAt(i);
+			if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
+					|| c == '+' || c == '*' || c == '-')) {
+				equation = null;
+				System.out.println("Please check the input!");
+				stringsum="your string contains illegal charactor";
+				return stringsum;
+			}
+		}
+		if(control=="!simplify")
+		{
+			stringsum=eq;
+			return stringsum;
+		}
+
+		front = control.substring(STATE, control.indexOf("="));
+		number = control.substring(control.indexOf("=") + 1);
+		String separate=control.substring(10);
+		int l=separate.split(" ").length;
+		for(int i=0;i<l;i++)
+		{
+			String f=separate.split(" ")[i].split("=")[0];
+			String nn=separate.split(" ")[i].split("=")[1];
+			if(nn.charAt(0)=='-')
+			{
+				stringsum="Error";
+				return stringsum;
+			}
+			eq=replace(f,nn,eq);
+		}
+		//control !simplify x=2 y=3 
+		//equation x*x+2*y
+		//substring contains head but not tail
+		System.out.println(eq);
 		a = false;
 		eq = eq + "+";
 		if (eq != null) {
@@ -186,10 +223,11 @@ public class Project0 {
 				System.out.println(stringsum);
 			} else {
 				System.out.println("Error,no variable!");
+				stringsum="Error,no variable!";
 			}
 		}
+		return stringsum;
 	}
-
 	static String unitsort(final String substr) {   // unit排序
 		String sorted = "";
 		List<String> list = new ArrayList<String>();
