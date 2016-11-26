@@ -11,6 +11,17 @@ public class Expression {
 	private String exp;
 	private String cmd;
 	private int action;
+	private boolean flag=false;
+	
+	
+	private boolean getFlag() {
+		return flag;
+	}
+
+	private void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+
 	public String getExp() {
 		return exp;
 	}
@@ -49,11 +60,190 @@ public class Expression {
 		}
 		return 2;// valid
 	}
-
+	
+	private String replace(String front,String number,String eq)
+	{
+		boolean a=false;
+		String abc = "";
+		int h = 0;
+		//对字符串进行替换
+		while (h < eq.length()) {
+			if (eq.charAt(h) >= 'a' && eq.charAt(h) <= 'z') {
+				abc = abc + eq.charAt(h);
+				if (h == eq.length() - 1 && abc.equals(front)) {//以要替换的字符串结尾
+					setFlag(true);
+					eq = eq.substring(0, h - abc.length() + 1) + number;
+					break;
+				}
+			} else {
+				a = false;
+				if (abc.equals(front)) {
+					setFlag(true);
+					eq = eq.substring(0, h - abc.length()) 
+							+ number + eq.substring(h);
+					h = h - abc.length() + number.length();
+				}
+				abc = "";
+			}
+			h++;
+		}
+		return eq;
+		
+	}
 	private String simplify()// 表达式是getExp(),命令是getCmd()
 	{
-		return "";
-	}
+				// a+b+c
+				// !simplify a=2
+				String eq = getExp();
+				String front = "";
+				String number = "";
+				String order = "";
+				// int f = 0;
+				int e = 0;
+				int j = 0;
+
+				int num = 0;
+				int nummu = 1;
+				int numsum = 0;
+
+				// 鍒ゅ畾鍓嶄竴涓槸鏁板瓧杩樻槸瀛楁瘝
+				boolean n = false;
+				boolean a = false;
+				String ab = null;
+				String absum = null;
+				String stringsum = "";
+				// replace
+
+				for (int i = 0; i < getExp().length(); i++) {
+					char c = getExp().charAt(i);
+					if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') 
+							|| c == '+' || c == '*' || c == '-')) {
+						setExp(null);
+						System.out.println("Please check the input!");
+						stringsum="your string contains illegal charactor";
+						return stringsum;
+					}
+				}
+				if(getCmd()=="!simplify")
+				{
+					stringsum=eq;
+					return stringsum;
+				}
+
+				front = getCmd().substring(10, getCmd().indexOf("="));
+				number = getCmd().substring(getCmd().indexOf("=") + 1);
+				String separate=getCmd().substring(10);
+				int l=separate.split(" ").length;
+				for(int i=0;i<l;i++)
+				{
+					String f=separate.split(" ")[i].split("=")[0];
+					String nn=separate.split(" ")[i].split("=")[1];
+					if(nn.charAt(0)=='-')
+					{
+						stringsum="Error";
+						return stringsum;
+					}
+					eq=replace(f,nn,eq);
+				}
+				//control !simplify x=2 y=3 
+				//equation x*x+2*y
+				//substring contains head but not tail
+				System.out.println(eq);
+				a = false;
+				eq = eq + "+";
+				if (eq != null) {
+					if (eq.charAt(0) == '-') {
+						order = order + "-";
+					} else {
+						order = order + "+";
+					}
+					for (int i = 1; i < eq.length(); i++) {
+						if (eq.charAt(i) == '+') {
+							order = order + "+";
+						} else if (eq.charAt(i) == '-') {
+							order = order + "-";
+						}
+					}
+					j = 1;
+					// f = 0;
+					while (true) {
+						e = eq.indexOf(String.valueOf(order.charAt(j)));
+						j++;
+						front = eq.substring(0, e);
+						front = front + "*";
+						if (j < order.length()) {
+							eq = eq.substring(e + 1);
+						}
+						nummu = 1;
+						num = 1;
+						ab = "";
+						absum = "";
+						for (int i = 0; i < front.length(); i++) {
+							if (front.charAt(i) >= '0' && front.charAt(i) <= '9') {
+								if (n) {
+									num = num * 10 + (front.charAt(i) - '0');
+								} else {
+									n = true;
+									num = front.charAt(i) - '0';
+								}
+							} else if (front.charAt(i) >= 'a'
+									&& front.charAt(i) <= 'z') {
+								if (a) {
+									ab = ab + front.charAt(i);
+								} else {
+									a = true;
+									ab = "" + front.charAt(i);
+								}
+							} else {
+								if (n) {
+									nummu = nummu * num;
+								}
+								if (a) {
+									absum = absum + '*' + ab;
+								}
+								n = false;
+								a = false;
+							}
+						}
+						// 绾瓧姣�
+						if (nummu == 1 && !"".equals(absum)) {
+							front = absum.substring(1);
+						} else {
+							front = nummu + absum;
+						}
+						// 绾暟瀛�
+						if ("".equals(absum)) {
+							front = "";
+							if (order.charAt(j - 2) == '+') {
+								numsum = numsum + nummu;
+							} else if (order.charAt(j - 2) == '-') {
+								numsum = numsum - nummu;
+							}
+						} else {
+							stringsum = stringsum + order.charAt(j - 2) + front;
+						}
+						if (j == order.length()) {
+							break;
+						}
+					}
+					stringsum = numsum + stringsum;
+					if (stringsum.charAt(0) == '+') {
+						stringsum = stringsum.substring(1);
+					}
+					if (stringsum.charAt(0) == '0') {
+						stringsum = stringsum.substring(2);
+					}
+					stringsum = reorganize(stringsum);
+					if (getFlag()) {
+						System.out.println(stringsum);
+					} else {
+						System.out.println("Error,no variable!");
+						stringsum="Error,no variable!";
+					}
+				}
+				return stringsum;
+			}
+	
 
 	public String doit() {
 		if (getAction() == 0)
